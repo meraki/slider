@@ -22,7 +22,7 @@
     "lib"
   ],
   "licenses": "MIT",
-  "main": "./lib/index.js",
+  "main": "./index.js",
   "config": {
     "port": 8005
   },
