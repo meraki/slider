@@ -17,11 +17,6 @@
   "bugs": {
     "url": "http://github.com/react-component/slider/issues"
   },
-  "files": [
-    "assets/*.css",
-    "lib",
-    "src"
-  ],
   "licenses": "MIT",
   "main": "./index.js",
   "config": {
