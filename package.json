@@ -19,7 +19,8 @@
   },
   "files": [
     "assets/*.css",
-    "lib"
+    "lib",
+    "src"
   ],
   "licenses": "MIT",
   "main": "./index.js",
