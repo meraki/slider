@@ -1114,7 +1114,7 @@
 	 * will remain to ensure logic does not differ in production.
 	 */
 	
-	var invariant = function (condition, format, a, b, c, d, e, f) {
+	function invariant(condition, format, a, b, c, d, e, f) {
 	  if (process.env.NODE_ENV !== 'production') {
 	    if (format === undefined) {
 	      throw new Error('invariant requires an error message argument');
@@ -1128,15 +1128,16 @@
 	    } else {
 	      var args = [a, b, c, d, e, f];
 	      var argIndex = 0;
-	      error = new Error('Invariant Violation: ' + format.replace(/%s/g, function () {
+	      error = new Error(format.replace(/%s/g, function () {
 	        return args[argIndex++];
 	      }));
+	      error.name = 'Invariant Violation';
 	    }
 	
 	    error.framesToPop = 1; // we don't care about invariant's own frame
 	    throw error;
 	  }
-	};
+	}
 	
 	module.exports = invariant;
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
@@ -10563,8 +10564,8 @@
 	     */
 	    // autoCapitalize and autoCorrect are supported in Mobile Safari for
 	    // keyboard hints.
-	    autoCapitalize: null,
-	    autoCorrect: null,
+	    autoCapitalize: MUST_USE_ATTRIBUTE,
+	    autoCorrect: MUST_USE_ATTRIBUTE,
 	    // autoSave allows WebKit/Blink to persist values of input fields on page reloads
 	    autoSave: null,
 	    // color is for Safari mask-icon link
@@ -10595,9 +10596,7 @@
 	    httpEquiv: 'http-equiv'
 	  },
 	  DOMPropertyNames: {
-	    autoCapitalize: 'autocapitalize',
 	    autoComplete: 'autocomplete',
-	    autoCorrect: 'autocorrect',
 	    autoFocus: 'autofocus',
 	    autoPlay: 'autoplay',
 	    autoSave: 'autosave',
@@ -13676,7 +13675,7 @@
 	    var value = LinkedValueUtils.getValue(props);
 	
 	    if (value != null) {
-	      updateOptions(this, props, value);
+	      updateOptions(this, Boolean(props.multiple), value);
 	    }
 	  }
 	}
@@ -16711,11 +16710,14 @@
 	 * @typechecks
 	 */
 	
+	/* eslint-disable fb-www/typeof-undefined */
+	
 	/**
 	 * Same as document.activeElement but wraps in a try-catch block. In IE it is
 	 * not safe to call document.activeElement if there is nothing focused.
 	 *
-	 * The activeElement will be null only if the document or document body is not yet defined.
+	 * The activeElement will be null only if the document or document body is not
+	 * yet defined.
 	 */
 	'use strict';
 	
@@ -16723,7 +16725,6 @@
 	  if (typeof document === 'undefined') {
 	    return null;
 	  }
-	
 	  try {
 	    return document.activeElement || document.body;
 	  } catch (e) {
@@ -18463,7 +18464,9 @@
 	  'setValueForProperty': 'update attribute',
 	  'setValueForAttribute': 'update attribute',
 	  'deleteValueForProperty': 'remove attribute',
-	  'dangerouslyReplaceNodeWithMarkupByID': 'replace'
+	  'setValueForStyles': 'update styles',
+	  'replaceNodeWithMarkup': 'replace',
+	  'updateTextContent': 'set textContent'
 	};
 	
 	function getTotalTime(measurements) {
@@ -18655,18 +18658,23 @@
 	'use strict';
 	
 	var performance = __webpack_require__(147);
-	var curPerformance = performance;
+	
+	var performanceNow;
 	
 	/**
 	 * Detect if we can use `window.performance.now()` and gracefully fallback to
 	 * `Date.now()` if it doesn't exist. We need to support Firefox < 15 for now
 	 * because of Facebook's testing infrastructure.
 	 */
-	if (!curPerformance || !curPerformance.now) {
-	  curPerformance = Date;
+	if (performance.now) {
+	  performanceNow = function () {
+	    return performance.now();
+	  };
+	} else {
+	  performanceNow = function () {
+	    return Date.now();
+	  };
 	}
-	
-	var performanceNow = curPerformance.now.bind(curPerformance);
 	
 	module.exports = performanceNow;
 
@@ -18715,7 +18723,7 @@
 	
 	'use strict';
 	
-	module.exports = '0.14.3';
+	module.exports = '0.14.6';
 
 /***/ },
 /* 149 */
@@ -19706,7 +19714,7 @@
 /* 163 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 	
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
@@ -19789,11 +19797,15 @@
 	    var defaultValue = 'defaultValue' in props ? props.defaultValue : initialValue;
 	    var value = 'value' in props ? props.value : defaultValue;
 	
+	    this.validateProps(this.props);
+	
 	    var upperBound = undefined;
 	    var lowerBound = undefined;
 	    if (props.range) {
 	      lowerBound = this.trimAlignValue(value[0]);
 	      upperBound = this.trimAlignValue(value[1]);
+	    } else if (props.reverseSlide) {
+	      lowerBound = this.trimAlignValue(value);
 	    } else {
 	      upperBound = this.trimAlignValue(value);
 	    }
@@ -19806,6 +19818,8 @@
 	      if (upperBound === min) {
 	        recent = 'upperBound';
 	      }
+	    } else if (props.reverseSlide) {
+	      recent = 'lowerBound';
 	    } else {
 	      recent = 'upperBound';
 	    }
@@ -19813,15 +19827,17 @@
 	    this.state = {
 	      handle: null,
 	      recent: recent,
-	      upperBound: upperBound,
 	      // If Slider is not range, set `lowerBound` equal to `min`.
-	      lowerBound: lowerBound || min
+	      lowerBound: lowerBound || min,
+	      // If Slider is not reverseSlide, set `upperBound` equal to `max`.
+	      upperBound: upperBound || max
 	    };
 	  }
 	
 	  _createClass(Slider, [{
 	    key: 'componentWillReceiveProps',
 	    value: function componentWillReceiveProps(nextProps) {
+	      this.validateProps(nextProps);
 	      if (!('value' in nextProps || 'min' in nextProps || 'max' in nextProps)) return;
 	
 	      var _state = this.state;
@@ -19840,6 +19856,18 @@
 	        });
 	        if (this.isValueOutOfBounds(upperBound, nextProps) || this.isValueOutOfBounds(lowerBound, nextProps)) {
 	          this.props.onChange([nextLowerBound, nextUpperBound]);
+	        }
+	      } else if (nextProps.reverseSlide) {
+	        var value = 'value' in nextProps ? nextProps.value : lowerBound;
+	        var nextValue = this.trimAlignValue(value, nextProps);
+	        if (nextValue === lowerBound && upperBound === nextProps.max) return;
+	
+	        this.setState({
+	          lowerBound: nextValue,
+	          upperBound: nextProps.max
+	        });
+	        if (this.isValueOutOfBounds(lowerBound, nextProps)) {
+	          this.props.onChange(nextValue);
 	        }
 	      } else {
 	        var value = 'value' in nextProps ? nextProps.value : upperBound;
@@ -19867,7 +19895,15 @@
 	      }
 	
 	      var data = (0, _objectAssign3['default'])({}, this.state, state);
-	      var changedValue = props.range ? [data.lowerBound, data.upperBound] : data.upperBound;
+	
+	      var changedValue = undefined;
+	      if (props.range) {
+	        changedValue = [data.lowerBound, data.upperBound];
+	      } else if (props.reverseSlide) {
+	        changedValue = data.lowerBound;
+	      } else {
+	        changedValue = data.upperBound;
+	      }
 	      props.onChange(changedValue);
 	    }
 	  }, {
@@ -19968,6 +20004,9 @@
 	          valueNeedChanging = value < upperBound ? 'lowerBound' : 'upperBound';
 	        }
 	      }
+	      if (this.props.reverseSlide) {
+	        valueNeedChanging = 'lowerBound';
+	      }
 	
 	      this.setState({
 	        handle: valueNeedChanging,
@@ -19986,7 +20025,12 @@
 	      var lowerBound = _state2.lowerBound;
 	      var upperBound = _state2.upperBound;
 	
-	      return this.props.range ? [lowerBound, upperBound] : upperBound;
+	      if (this.props.range) {
+	        return [lowerBound, upperBound];
+	      } else if (this.props.reverseSlide) {
+	        return lowerBound;
+	      }
+	      return upperBound;
 	    }
 	  }, {
 	    key: 'getSliderLength',
@@ -20016,6 +20060,17 @@
 	        precision = stepString.length - stepString.indexOf('.') - 1;
 	      }
 	      return precision;
+	    }
+	  }, {
+	    key: 'validateProps',
+	    value: function validateProps(props) {
+	      // Throw warning if the user enables both range and reverseSlide
+	      if (process.env.NODE_ENV === 'production') {
+	        return;
+	      }
+	      if (props.range === true && props.reverseSlide === true) {
+	        console.warn('Both range and reverseSlide cannot be enabled simultaneously. Disable one.');
+	      }
 	    }
 	  }, {
 	    key: 'isValueOutOfBounds',
@@ -20138,6 +20193,7 @@
 	      var dots = _props3.dots;
 	      var included = _props3.included;
 	      var range = _props3.range;
+	      var reverseSlide = _props3.reverseSlide;
 	      var step = _props3.step;
 	      var marks = _props3.marks;
 	      var max = _props3.max;
@@ -20152,19 +20208,22 @@
 	      var handleClassName = prefixCls + '-handle';
 	      var isNoTip = step === null || tipFormatter === null;
 	
-	      var upper = _react2['default'].createElement(_Handle2['default'], { className: handleClassName,
-	        noTip: isNoTip, tipTransitionName: tipTransitionName, tipFormatter: tipFormatter,
-	        offset: upperOffset, value: upperBound, dragging: handle === 'upperBound' });
+	      var upper = undefined;
+	      if (!reverseSlide) {
+	        upper = _react2['default'].createElement(_Handle2['default'], { className: handleClassName,
+	          noTip: isNoTip, tipTransitionName: tipTransitionName, tipFormatter: tipFormatter,
+	          offset: upperOffset, value: upperBound, dragging: handle === 'upperBound' });
+	      }
 	
 	      var lower = null;
-	      if (range) {
+	      if (range || reverseSlide) {
 	        lower = _react2['default'].createElement(_Handle2['default'], { className: handleClassName,
 	          noTip: isNoTip, tipTransitionName: tipTransitionName, tipFormatter: tipFormatter,
 	          offset: lowerOffset, value: lowerBound, dragging: handle === 'lowerBound' });
 	      }
 	
 	      var sliderClassName = (0, _classnames2['default'])((_classNames = {}, _defineProperty(_classNames, prefixCls, true), _defineProperty(_classNames, prefixCls + '-disabled', disabled), _defineProperty(_classNames, className, !!className), _classNames));
-	      var isIncluded = included || range;
+	      var isIncluded = included || range || reverseSlide;
 	      return _react2['default'].createElement(
 	        'div',
 	        { ref: 'slider', className: sliderClassName,
@@ -20174,8 +20233,8 @@
 	        lower,
 	        _react2['default'].createElement(_Track2['default'], { className: prefixCls + '-track', included: isIncluded,
 	          offset: lowerOffset, length: upperOffset - lowerOffset }),
-	        _react2['default'].createElement(_Dots2['default'], { prefixCls: prefixCls, marks: marks, dots: dots, step: step,
-	          included: isIncluded, lowerBound: lowerBound,
+	        _react2['default'].createElement(_Dots2['default'], { prefixCls: prefixCls, reverseSlide: reverseSlide, marks: marks,
+	          dots: dots, step: step, included: isIncluded, lowerBound: lowerBound,
 	          upperBound: upperBound, max: max, min: min }),
 	        _react2['default'].createElement(_Marks2['default'], { className: prefixCls + '-mark', marks: marks,
 	          included: isIncluded, lowerBound: lowerBound,
@@ -20207,6 +20266,7 @@
 	  tipFormatter: _react2['default'].PropTypes.func,
 	  dots: _react2['default'].PropTypes.bool,
 	  range: _react2['default'].PropTypes.bool,
+	  reverseSlide: _react2['default'].PropTypes.bool,
 	  allowCross: _react2['default'].PropTypes.bool
 	};
 	
@@ -20228,11 +20288,13 @@
 	  disabled: false,
 	  dots: false,
 	  range: false,
+	  reverseSlide: false,
 	  allowCross: true
 	};
 	
 	exports['default'] = Slider;
 	module.exports = exports['default'];
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
 
 /***/ },
 /* 164 */
@@ -20359,7 +20421,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
-	  Copyright (c) 2015 Jed Watson.
+	  Copyright (c) 2016 Jed Watson.
 	  Licensed under the MIT License (MIT), see
 	  http://jedwatson.github.io/classnames
 	*/
@@ -20371,7 +20433,7 @@
 		var hasOwn = {}.hasOwnProperty;
 	
 		function classNames () {
-			var classes = '';
+			var classes = [];
 	
 			for (var i = 0; i < arguments.length; i++) {
 				var arg = arguments[i];
@@ -20380,19 +20442,19 @@
 				var argType = typeof arg;
 	
 				if (argType === 'string' || argType === 'number') {
-					classes += ' ' + arg;
+					classes.push(arg);
 				} else if (Array.isArray(arg)) {
-					classes += ' ' + classNames.apply(null, arg);
+					classes.push(classNames.apply(null, arg));
 				} else if (argType === 'object') {
 					for (var key in arg) {
 						if (hasOwn.call(arg, key) && arg[key]) {
-							classes += ' ' + key;
+							classes.push(key);
 						}
 					}
 				}
 			}
 	
-			return classes.substr(1);
+			return classes.join(' ');
 		}
 	
 		if (typeof module !== 'undefined' && module.exports) {
@@ -21436,40 +21498,37 @@
 /* 176 */
 /***/ function(module, exports) {
 
-	/**
-	 * lodash 3.0.4 (Custom Build) <https://lodash.com/>
-	 * Build: `lodash modern modularize exports="npm" -o ./`
-	 * Copyright 2012-2015 The Dojo Foundation <http://dojofoundation.org/>
+	/* WEBPACK VAR INJECTION */(function(global) {/**
+	 * lodash 3.0.5 (Custom Build) <https://lodash.com/>
+	 * Build: `lodash modularize exports="npm" -o ./`
+	 * Copyright 2012-2016 The Dojo Foundation <http://dojofoundation.org/>
 	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
-	 * Copyright 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+	 * Copyright 2009-2016 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
 	 * Available under MIT license <https://lodash.com/license>
 	 */
 	
-	/**
-	 * Checks if `value` is object-like.
-	 *
-	 * @private
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
-	 */
-	function isObjectLike(value) {
-	  return !!value && typeof value == 'object';
-	}
+	/** Used as references for various `Number` constants. */
+	var MAX_SAFE_INTEGER = 9007199254740991;
 	
-	/** Used for native method references. */
-	var objectProto = Object.prototype;
+	/** `Object#toString` result references. */
+	var argsTag = '[object Arguments]',
+	    funcTag = '[object Function]',
+	    genTag = '[object GeneratorFunction]';
+	
+	/** Used for built-in method references. */
+	var objectProto = global.Object.prototype;
 	
 	/** Used to check objects for own properties. */
 	var hasOwnProperty = objectProto.hasOwnProperty;
 	
-	/** Native method references. */
-	var propertyIsEnumerable = objectProto.propertyIsEnumerable;
-	
 	/**
-	 * Used as the [maximum length](http://ecma-international.org/ecma-262/6.0/#sec-number.max_safe_integer)
-	 * of an array-like value.
+	 * Used to resolve the [`toStringTag`](http://ecma-international.org/ecma-262/6.0/#sec-object.prototype.tostring)
+	 * of values.
 	 */
-	var MAX_SAFE_INTEGER = 9007199254740991;
+	var objectToString = objectProto.toString;
+	
+	/** Built-in value references. */
+	var propertyIsEnumerable = objectProto.propertyIsEnumerable;
 	
 	/**
 	 * The base implementation of `_.property` without support for deep paths.
@@ -21497,31 +21556,7 @@
 	var getLength = baseProperty('length');
 	
 	/**
-	 * Checks if `value` is array-like.
-	 *
-	 * @private
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is array-like, else `false`.
-	 */
-	function isArrayLike(value) {
-	  return value != null && isLength(getLength(value));
-	}
-	
-	/**
-	 * Checks if `value` is a valid array-like length.
-	 *
-	 * **Note:** This function is based on [`ToLength`](http://ecma-international.org/ecma-262/6.0/#sec-tolength).
-	 *
-	 * @private
-	 * @param {*} value The value to check.
-	 * @returns {boolean} Returns `true` if `value` is a valid length, else `false`.
-	 */
-	function isLength(value) {
-	  return typeof value == 'number' && value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
-	}
-	
-	/**
-	 * Checks if `value` is classified as an `arguments` object.
+	 * Checks if `value` is likely an `arguments` object.
 	 *
 	 * @static
 	 * @memberOf _
@@ -21537,12 +21572,181 @@
 	 * // => false
 	 */
 	function isArguments(value) {
-	  return isObjectLike(value) && isArrayLike(value) &&
-	    hasOwnProperty.call(value, 'callee') && !propertyIsEnumerable.call(value, 'callee');
+	  // Safari 8.1 incorrectly makes `arguments.callee` enumerable in strict mode.
+	  return isArrayLikeObject(value) && hasOwnProperty.call(value, 'callee') &&
+	    (!propertyIsEnumerable.call(value, 'callee') || objectToString.call(value) == argsTag);
+	}
+	
+	/**
+	 * Checks if `value` is array-like. A value is considered array-like if it's
+	 * not a function and has a `value.length` that's an integer greater than or
+	 * equal to `0` and less than or equal to `Number.MAX_SAFE_INTEGER`.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @type Function
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is array-like, else `false`.
+	 * @example
+	 *
+	 * _.isArrayLike([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isArrayLike(document.body.children);
+	 * // => true
+	 *
+	 * _.isArrayLike('abc');
+	 * // => true
+	 *
+	 * _.isArrayLike(_.noop);
+	 * // => false
+	 */
+	function isArrayLike(value) {
+	  return value != null &&
+	    !(typeof value == 'function' && isFunction(value)) && isLength(getLength(value));
+	}
+	
+	/**
+	 * This method is like `_.isArrayLike` except that it also checks if `value`
+	 * is an object.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @type Function
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is an array-like object, else `false`.
+	 * @example
+	 *
+	 * _.isArrayLikeObject([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isArrayLikeObject(document.body.children);
+	 * // => true
+	 *
+	 * _.isArrayLikeObject('abc');
+	 * // => false
+	 *
+	 * _.isArrayLikeObject(_.noop);
+	 * // => false
+	 */
+	function isArrayLikeObject(value) {
+	  return isObjectLike(value) && isArrayLike(value);
+	}
+	
+	/**
+	 * Checks if `value` is classified as a `Function` object.
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is correctly classified, else `false`.
+	 * @example
+	 *
+	 * _.isFunction(_);
+	 * // => true
+	 *
+	 * _.isFunction(/abc/);
+	 * // => false
+	 */
+	function isFunction(value) {
+	  // The use of `Object#toString` avoids issues with the `typeof` operator
+	  // in Safari 8 which returns 'object' for typed array constructors, and
+	  // PhantomJS 1.9 which returns 'function' for `NodeList` instances.
+	  var tag = isObject(value) ? objectToString.call(value) : '';
+	  return tag == funcTag || tag == genTag;
+	}
+	
+	/**
+	 * Checks if `value` is a valid array-like length.
+	 *
+	 * **Note:** This function is loosely based on [`ToLength`](http://ecma-international.org/ecma-262/6.0/#sec-tolength).
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is a valid length, else `false`.
+	 * @example
+	 *
+	 * _.isLength(3);
+	 * // => true
+	 *
+	 * _.isLength(Number.MIN_VALUE);
+	 * // => false
+	 *
+	 * _.isLength(Infinity);
+	 * // => false
+	 *
+	 * _.isLength('3');
+	 * // => false
+	 */
+	function isLength(value) {
+	  return typeof value == 'number' && value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
+	}
+	
+	/**
+	 * Checks if `value` is the [language type](https://es5.github.io/#x8) of `Object`.
+	 * (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+	 * @example
+	 *
+	 * _.isObject({});
+	 * // => true
+	 *
+	 * _.isObject([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isObject(_.noop);
+	 * // => true
+	 *
+	 * _.isObject(null);
+	 * // => false
+	 */
+	function isObject(value) {
+	  // Avoid a V8 JIT bug in Chrome 19-20.
+	  // See https://code.google.com/p/v8/issues/detail?id=2291 for more details.
+	  var type = typeof value;
+	  return !!value && (type == 'object' || type == 'function');
+	}
+	
+	/**
+	 * Checks if `value` is object-like. A value is object-like if it's not `null`
+	 * and has a `typeof` result of "object".
+	 *
+	 * @static
+	 * @memberOf _
+	 * @category Lang
+	 * @param {*} value The value to check.
+	 * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+	 * @example
+	 *
+	 * _.isObjectLike({});
+	 * // => true
+	 *
+	 * _.isObjectLike([1, 2, 3]);
+	 * // => true
+	 *
+	 * _.isObjectLike(_.noop);
+	 * // => false
+	 *
+	 * _.isObjectLike(null);
+	 * // => false
+	 */
+	function isObjectLike(value) {
+	  return !!value && typeof value == 'object';
 	}
 	
 	module.exports = isArguments;
-
+	
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
 /* 177 */
@@ -22779,7 +22983,7 @@
 	        var self = _this;
 	        _reactDom2['default'].unstable_renderSubtreeIntoContainer(_this, _this.getPopupElement(), _this.getPopupContainer(), function renderPopup() {
 	          if (this.isMounted()) {
-	            self.popupDomNode = _reactDom2['default'].findDOMNode(this);
+	            self.popupDomNode = (0, _reactDom.findDOMNode)(this);
 	          } else {
 	            self.popupDomNode = null;
 	          }
@@ -22815,7 +23019,7 @@
 	    if (popupContainer) {
 	      _reactDom2['default'].unmountComponentAtNode(popupContainer);
 	      if (this.props.getPopupContainer) {
-	        var mountNode = this.props.getPopupContainer();
+	        var mountNode = this.props.getPopupContainer((0, _reactDom.findDOMNode)(this));
 	        mountNode.removeChild(popupContainer);
 	      } else {
 	        document.body.removeChild(popupContainer);
@@ -22883,7 +23087,7 @@
 	
 	  onDocumentClick: function onDocumentClick(event) {
 	    var target = event.target;
-	    var root = _reactDom2['default'].findDOMNode(this);
+	    var root = (0, _reactDom.findDOMNode)(this);
 	    var popupNode = this.getPopupDomNode();
 	    if (!_rcUtil.Dom.contains(root, target) && !_rcUtil.Dom.contains(popupNode, target)) {
 	      this.setPopupVisible(false);
@@ -22899,7 +23103,7 @@
 	    if (!this.popupContainer) {
 	      this.popupContainer = document.createElement('div');
 	      if (this.props.getPopupContainer) {
-	        var mountNode = this.props.getPopupContainer();
+	        var mountNode = this.props.getPopupContainer((0, _reactDom.findDOMNode)(this));
 	        mountNode.appendChild(this.popupContainer);
 	      } else {
 	        document.body.appendChild(this.popupContainer);
@@ -25372,7 +25576,7 @@
 	
 	function calcPoints(marks, dots, step, min, max) {
 	  var points = Object.keys(marks).map(parseFloat);
-	  if (dots) {
+	  if (dots && step) {
 	    for (var i = min; i <= max; i = i + step) {
 	      if (points.indexOf(i) >= 0) continue;
 	      points.push(i);
