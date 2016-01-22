@@ -2,10 +2,10 @@ import React from 'react';
 import {Dom as DomUtils} from 'rc-util';
 import classNames from 'classnames';
 import objectAssign from 'object-assign';
-import Track from './Track';
-import Handle from './Handle';
-import Dots from './Dots';
-import Marks from './Marks';
+import Track from './Track.jsx';
+import Handle from './Handle.jsx';
+import Dots from './Dots.jsx';
+import Marks from './Marks.jsx';
 
 function noop() {
 }
