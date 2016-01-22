@@ -23,8 +23,7 @@
     "port": 8005
   },
   "scripts": {
-    "babel": "babel ./components --out-dir ./lib",
-    "sass": "cpx './components/**/*.scss' ./lib",
+    "babel": "babel ./src --out-dir ./lib",
     "build": "npm run babel && npm run sass",
     "prepublish": "npm run build",
     "gh-pages": "rc-tools run gh-pages",
