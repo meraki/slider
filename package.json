@@ -22,6 +22,9 @@
   "config": {
     "port": 8005
   },
+  "babel": {
+    "plugins": ["transform-react-jsx"]
+  },
   "scripts": {
     "babel": "babel ./src --out-dir ./lib",
     "build": "npm run babel",
