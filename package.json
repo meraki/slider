@@ -1,6 +1,6 @@
 {
   "name": "rc-slider-meraki-fork",
-  "version": "3.3.3",
+  "version": "3.3.2",
   "description": "slider ui component for react",
   "keywords": [
     "react",
@@ -17,12 +17,8 @@
   "bugs": {
     "url": "http://github.com/meraki/slider/issues"
   },
-  "files": [
-    "assets/*.css",
-    "lib"
-  ],
   "licenses": "MIT",
-  "main": "./index.js",
+  "main": "index.js",
   "config": {
     "port": 8005
   },
