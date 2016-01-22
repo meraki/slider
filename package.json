@@ -1,6 +1,6 @@
 {
-  "name": "rc-slider",
-  "version": "3.3.1",
+  "name": "rc-slider-meraki-fork",
+  "version": "3.3.2",
   "description": "slider ui component for react",
   "keywords": [
     "react",
@@ -8,21 +8,21 @@
     "react-slider",
     "slider"
   ],
-  "homepage": "http://github.com/react-component/slider",
-  "author": "sima.zhang1990@gmail.com",
+  "homepage": "http://github.com/meraki/slider",
+  "author": "alex.taipale@meraki.com",
   "repository": {
     "type": "git",
-    "url": "git@github.com:react-component/slider.git"
+    "url": "git@github.com:meraki/slider.git"
   },
   "bugs": {
-    "url": "http://github.com/react-component/slider/issues"
+    "url": "http://github.com/meraki/slider/issues"
   },
   "files": [
     "assets/*.css",
     "lib"
   ],
   "licenses": "MIT",
-  "main": "./lib/index.js",
+  "main": "./index.js",
   "config": {
     "port": 8005
   },
