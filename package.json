@@ -23,8 +23,8 @@
     "port": 8005
   },
   "scripts": {
-    "babel": "babel ./src --out-dir ./lib",
-    "build": "npm run babel && npm run sass",
+    "babel": "babel index.js --out-dir ./lib",
+    "build": "npm run babel",
     "prepublish": "npm run build",
     "gh-pages": "rc-tools run gh-pages",
     "start": "rc-server",
