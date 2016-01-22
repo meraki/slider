@@ -17,6 +17,10 @@
   "bugs": {
     "url": "http://github.com/meraki/slider/issues"
   },
+  "files": [
+    "assets/*.css",
+    "lib"
+  ],
   "licenses": "MIT",
   "main": "./lib/index.js",
   "config": {
