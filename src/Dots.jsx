@@ -13,6 +13,7 @@ function calcPoints(marks, dots, step, min, max) {
 }
 
 const Dots = ({prefixCls, marks, dots, step, included, lowerBound, upperBound, max, min}) => {
+  if (!dots) return <div></div>;
   const range = max - min;
   const elements = calcPoints(marks, dots, step, min, max).map((point) => {
     const offset = (point - min) / range * 100 + '%';
