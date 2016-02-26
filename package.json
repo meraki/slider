@@ -1,0 +1,82 @@
+{
+  "_args": [
+    [
+      "meraki-slider@1.1.0",
+      "/home1/ataipale/co/manage"
+    ]
+  ],
+  "_from": "meraki-slider@1.1.0",
+  "_id": "meraki-slider@1.1.0",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/meraki-slider",
+  "_nodeVersion": "4.2.2",
+  "_npmUser": {
+    "email": "alex.taipale@meraki.net",
+    "name": "ataipale"
+  },
+  "_npmVersion": "3.5.3",
+  "_phantomChildren": {},
+  "_requested": {
+    "name": "meraki-slider",
+    "raw": "meraki-slider@1.1.0",
+    "type": "version"
+  },
+  "_requiredBy": [
+    "#DEV:/"
+  ],
+  "_shrinkwrap": null,
+  "_spec": "meraki-slider@1.1.0",
+  "_where": "/home1/ataipale/co/manage",
+  "dependencies": {
+    "classnames": "^2.2.1",
+    "object-assign": "^4.0.1",
+    "rc-tooltip": "3.x",
+    "rc-util": "3.x"
+  },
+  "description": "slider ui component for react",
+  "devDependencies": {
+    "webpack": "1.12.9",
+    "grunt-webpack": "1.0.11",
+    "webpack-dev-server": "1.12.1",
+    "expect.js": "0.3.x",
+    "rc-server": "3.x",
+    "rc-tools": "4.x",
+    "react": "~0.14.0",
+    "react-addons-test-utils": "^0.14.0",
+    "react-dom": "~0.14.0"
+  },
+  "directories": {},
+  "files": [
+    "assets/*.css",
+    "lib"
+  ],
+  "homepage": "https://github.com/meraki/slider/tree/reverse_slide_lib",
+  "keywords": [
+    "react",
+    "react-component",
+    "react-slider",
+    "slider"
+  ],
+  "licenses": "MIT",
+  "main": "./lib/index.js",
+  "name": "meraki-slider",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/meraki/slider/tree/reverse_slide_lib.git"
+  },
+  "scripts": {
+    "browser-test": "rc-tools run browser-test",
+    "browser-test-cover": "rc-tools run browser-test-cover",
+    "build": "rc-tools run build",
+    "gh-pages": "rc-tools run gh-pages",
+    "karma": "rc-tools run karma",
+    "lint": "rc-tools run lint",
+    "pub": "rc-tools run pub",
+    "saucelabs": "rc-tools run saucelabs",
+    "start": "rc-server"
+  },
+  "version": "1.1.0"
+}
