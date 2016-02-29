@@ -48,7 +48,7 @@
   },
   "directories": {},
   "files": [
-    "assets/*.css",
+    "assets/*.scss",
     "lib"
   ],
   "homepage": "https://github.com/meraki/slider/tree/reverse_slide_lib",
