@@ -149,6 +149,7 @@ ReactDOM.render(<Merakislider />, container);
         </tr>
     </tbody>
 </table>
+
 ## Development
 
 ```
