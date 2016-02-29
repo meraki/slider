@@ -36,9 +36,6 @@
   },
   "description": "slider ui component for react",
   "devDependencies": {
-    "webpack": "1.12.9",
-    "grunt-webpack": "1.0.11",
-    "webpack-dev-server": "1.12.1",
     "expect.js": "0.3.x",
     "rc-server": "3.x",
     "rc-tools": "4.x",
@@ -62,7 +59,7 @@
   "main": "./lib/index.js",
   "name": "meraki-slider",
   "optionalDependencies": {},
-  "readme": "ERROR: No README data found!",
+  "readmeFilename": "README.md",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/meraki/slider/tree/reverse_slide_lib.git"
@@ -73,7 +70,6 @@
     "build": "rc-tools run build",
     "gh-pages": "rc-tools run gh-pages",
     "karma": "rc-tools run karma",
-    "lint": "rc-tools run lint",
     "pub": "rc-tools run pub",
     "saucelabs": "rc-tools run saucelabs",
     "start": "rc-server"
