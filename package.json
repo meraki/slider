@@ -34,7 +34,7 @@
     "rc-tooltip": "3.x",
     "rc-util": "3.x"
   },
-  "description": "slider ui component for react",
+  "description": "meraki's fork of rc-slider, a react slider component",
   "devDependencies": {
     "expect.js": "0.3.x",
     "rc-server": "3.x",
@@ -62,7 +62,7 @@
   "readmeFilename": "README.md",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/meraki/slider/tree/reverse_slide_lib.git"
+    "url": "git+ssh://git@github.com/meraki/slider/reverse_slide_lib"
   },
   "scripts": {
     "browser-test": "rc-tools run browser-test",
@@ -71,7 +71,6 @@
     "gh-pages": "rc-tools run gh-pages",
     "karma": "rc-tools run karma",
     "pub": "rc-tools run pub",
-    "saucelabs": "rc-tools run saucelabs",
     "start": "rc-server"
   },
   "version": "1.2.0"
