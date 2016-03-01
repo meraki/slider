@@ -1,39 +1,18 @@
-# rc-slider
+# meraki-slider
 ---
 
-slider ui component for react
+meraki's fork of rc-slider, a react slider component 
 
 [![NPM version][npm-image]][npm-url]
-[![build status][travis-image]][travis-url]
-[![Test coverage][coveralls-image]][coveralls-url]
-[![gemnasium deps][gemnasium-image]][gemnasium-url]
 [![node version][node-image]][node-url]
 [![npm download][download-image]][download-url]
-[![Sauce Test Status](https://saucelabs.com/buildstatus/rc-slider)](https://saucelabs.com/u/rc-slider)
 
-[![Sauce Test Status](https://saucelabs.com/browser-matrix/rc-slider.svg)](https://saucelabs.com/u/rc-slider)
-
-[npm-image]: http://img.shields.io/npm/v/rc-slider.svg?style=flat-square
-[npm-url]: http://npmjs.org/package/rc-slider
-[travis-image]: https://img.shields.io/travis/react-component/slider.svg?style=flat-square
-[travis-url]: https://travis-ci.org/react-component/slider
-[coveralls-image]: https://img.shields.io/coveralls/react-component/slider.svg?style=flat-square
-[coveralls-url]: https://coveralls.io/r/react-component/slider?branch=master
-[gemnasium-image]: http://img.shields.io/gemnasium/react-component/slider.svg?style=flat-square
-[gemnasium-url]: https://gemnasium.com/react-component/slider
+[npm-image]: http://img.shields.io/npm/v/meraki-slider.svg?style=flat-square
+[npm-url]: http://npmjs.org/package/meraki-slider
 [node-image]: https://img.shields.io/badge/node.js-%3E=_0.10-green.svg?style=flat-square
 [node-url]: http://nodejs.org/download/
-[download-image]: https://img.shields.io/npm/dm/rc-slider.svg?style=flat-square
-[download-url]: https://npmjs.org/package/rc-slider
-
-## Screenshots
-
-<img src="https://t.alipayobjects.com/images/T1ki8fXeprXXXXXXXX.png" width="550"/>
-
-<img src="https://t.alipayobjects.com/images/T1pPhfXhBqXXXXXXXX.png" width="550"/>
-
-<img src="https://t.alipayobjects.com/images/T1wO8fXd4rXXXXXXXX.png" width="550"/>
-
+[download-image]: https://img.shields.io/npm/dm/meraki-slider.svg?style=flat-square
+[download-url]: https://npmjs.org/package/meraki-slider
 
 ## Feature
 
@@ -41,22 +20,18 @@ slider ui component for react
 
 ### Keyboard
 
-
-
 ## install
 
-[![rc-slider](https://nodei.co/npm/rc-slider.png)](https://npmjs.org/package/rc-slider)
+[![meraki-slider](https://nodei.co/npm/meraki-slider.png)](https://npmjs.org/package/meraki-slider)
 
 ## Usage
 
 ```js
 var React = require('react');
 var ReactDOM = require('react-dom');
-var Rcslider = require('rc-slider');
-ReactDOM.render(<Rcslider />, container);
+var Merakislider = require('meraki-slider');
+ReactDOM.render(<Merakislider />, container);
 ```
-
-## API
 
 ### props
 
@@ -166,6 +141,12 @@ ReactDOM.render(<Rcslider />, container);
           <td>NOOP</td>
           <td>`onAfterChange` will be triggered when `ontouchend` or `onmouseup` is triggered.</td>
         </tr>
+        <tr>
+          <td>reverseSlide</td>
+          <td>function</td>
+          <td>NOOP</td>
+          <td>reverseSlide with tether a slider with a range on the right</td>
+        </tr>
     </tbody>
 </table>
 
@@ -176,20 +157,6 @@ npm install
 npm start
 ```
 
-## Example
-
-http://localhost:8005/examples/
-
-online example: http://react-component.github.io/slider/
-
-## Test Case
-
-http://localhost:8005/tests/runner.html?coverage
-
-## Coverage
-
-http://localhost:8005/node_modules/rc-server/node_modules/node-jscover/lib/front-end/jscoverage.html?w=http://localhost:8088/tests/runner.html?coverage
-
 ## License
 
-rc-slider is released under the MIT license.
+meraki-slider is released under the MIT license.
