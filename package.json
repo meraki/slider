@@ -1,42 +1,43 @@
 {
-  "name": "rc-slider",
-  "version": "3.3.1",
-  "description": "slider ui component for react",
-  "keywords": [
-    "react",
-    "react-component",
-    "react-slider",
-    "slider"
+  "_args": [
+    [
+      "meraki-slider@1.1.0",
+      "/home1/ataipale/co/manage"
+    ]
   ],
-  "homepage": "http://github.com/react-component/slider",
-  "author": "sima.zhang1990@gmail.com",
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:react-component/slider.git"
+  "_from": "meraki-slider@1.1.0",
+  "_id": "meraki-slider@1.1.0",
+  "_inCache": true,
+  "_installable": true,
+  "_location": "/meraki-slider",
+  "_nodeVersion": "4.2.2",
+  "_npmUser": {
+    "email": "alex.taipale@meraki.net",
+    "name": "ataipale"
   },
-  "bugs": {
-    "url": "http://github.com/react-component/slider/issues"
+  "_npmVersion": "3.5.3",
+  "_phantomChildren": {},
+  "_requested": {
+    "name": "meraki-slider",
+    "raw": "meraki-slider@1.1.0",
+    "type": "version"
   },
-  "files": [
-    "assets/*.css",
-    "lib"
+  "_requiredBy": [
+    "#DEV:/"
   ],
-  "licenses": "MIT",
-  "main": "./lib/index.js",
+  "_shrinkwrap": null,
+  "_spec": "meraki-slider@1.1.0",
+  "_where": "/home1/ataipale/co/manage",
   "config": {
     "port": 8005
   },
-  "scripts": {
-    "build": "rc-tools run build",
-    "gh-pages": "rc-tools run gh-pages",
-    "start": "rc-server",
-    "pub": "rc-tools run pub",
-    "lint": "rc-tools run lint",
-    "karma": "rc-tools run karma",
-    "saucelabs": "rc-tools run saucelabs",
-    "browser-test": "rc-tools run browser-test",
-    "browser-test-cover": "rc-tools run browser-test-cover"
+  "dependencies": {
+    "classnames": "^2.2.1",
+    "object-assign": "^4.0.1",
+    "rc-tooltip": "3.x",
+    "rc-util": "3.x"
   },
+  "description": "meraki's fork of rc-slider, a react slider component",
   "devDependencies": {
     "expect.js": "0.3.x",
     "pre-commit": "1.x",
@@ -46,13 +47,35 @@
     "react-addons-test-utils": "^0.14.0",
     "react-dom": "~0.14.0"
   },
-  "pre-commit": [
-    "lint"
+  "directories": {},
+  "files": [
+    "assets/*.css",
+    "lib"
   ],
-  "dependencies": {
-    "classnames": "^2.2.1",
-    "object-assign": "^4.0.1",
-    "rc-tooltip": "3.x",
-    "rc-util": "3.x"
-  }
+  "homepage": "https://github.com/meraki/slider/tree/reverseSlide",
+  "keywords": [
+    "react",
+    "react-component",
+    "react-slider",
+    "slider"
+  ],
+  "licenses": "MIT",
+  "main": "./lib/index.js",
+  "name": "meraki-slider",
+  "optionalDependencies": {},
+  "readmeFilename": "README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/meraki/slider"
+  },
+  "scripts": {
+    "browser-test": "rc-tools run browser-test",
+    "browser-test-cover": "rc-tools run browser-test-cover",
+    "build": "rc-tools run build",
+    "gh-pages": "rc-tools run gh-pages",
+    "karma": "rc-tools run karma",
+    "pub": "rc-tools run pub",
+    "start": "rc-server"
+  },
+  "version": "1.2.9"
 }
