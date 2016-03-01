@@ -28,6 +28,9 @@
   "_shrinkwrap": null,
   "_spec": "meraki-slider@1.1.0",
   "_where": "/home1/ataipale/co/manage",
+  "config": {
+    "port": 8005
+  },
   "dependencies": {
     "classnames": "^2.2.1",
     "object-assign": "^4.0.1",
@@ -37,6 +40,7 @@
   "description": "meraki's fork of rc-slider, a react slider component",
   "devDependencies": {
     "expect.js": "0.3.x",
+    "pre-commit": "1.x",
     "rc-server": "3.x",
     "rc-tools": "4.x",
     "react": "~0.14.0",
@@ -45,7 +49,7 @@
   },
   "directories": {},
   "files": [
-    "assets/*.scss",
+    "assets/*.css",
     "lib"
   ],
   "homepage": "https://github.com/meraki/slider/tree/reverse_slide_lib",
