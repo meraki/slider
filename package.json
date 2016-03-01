@@ -1,10 +1,4 @@
 {
-  "_args": [
-    [
-      "meraki-slider@1.1.0",
-      "/home1/ataipale/co/manage"
-    ]
-  ],
   "_from": "meraki-slider@1.1.0",
   "_id": "meraki-slider@1.1.0",
   "_inCache": true,
@@ -38,6 +32,12 @@
     "rc-util": "3.x"
   },
   "description": "meraki's fork of rc-slider, a react slider component",
+  "keywords": [
+    "react",
+    "react-component",
+    "react-slider",
+    "slider"
+  ],
   "devDependencies": {
     "expect.js": "0.3.x",
     "pre-commit": "1.x",
