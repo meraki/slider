@@ -45,6 +45,7 @@ class Slider extends React.Component {
       upperBound = this.trimAlignValue(value[1]);
     } else if (props.reverseSlide) {
       lowerBound = this.trimAlignValue(value);
+      upperBound = this.trimAlignValue(this.props.max);
     } else {
       upperBound = this.trimAlignValue(value);
     }
@@ -66,10 +67,9 @@ class Slider extends React.Component {
     this.state = {
       handle: null,
       recent: recent,
-      // If Slider is not range, set `lowerBound` equal to `min`.
+      // If Slider is not range or reverseSlide, set `lowerBound` equal to `min`.
       lowerBound: (lowerBound || min),
-      // If Slider is not reverseSlide, set `upperBound` equal to `max`.
-      upperBound: (upperBound || max),
+      upperBound: upperBound,
     };
   }
 
