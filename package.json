@@ -48,5 +48,5 @@
     "pub": "rc-tools run pub",
     "start": "rc-server"
   },
-  "version": "1.3.4"
+  "version": "1.3.5"
 }
